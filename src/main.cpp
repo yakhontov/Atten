@@ -1,11 +1,9 @@
 #include "main.h"
 #include "config.h"
 #include "encoder.h"
-#include "menu.h"
 #include "screen.h"
 #include <Arduino.h>
 #include <U8g2lib.h>
-#include <MUIU8g2.h>
 
 // https://github.com/olikraus/u8g2/blob/master/sys/arduino/u8g2_page_buffer/MUIInputVersatileRotaryEncoder/MUIInputVersatileRotaryEncoder.ino
 

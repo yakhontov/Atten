@@ -2,8 +2,6 @@
 #include "config.h"
 #include <Arduino.h>
 #include <Versatile_RotaryEncoder.h>
-#include "menu.h"
-#include "menu.h"
 #include "screen.h"
 
 Versatile_RotaryEncoder encoder(ENC_CLK, ENC_DT, ENC_SW);
@@ -11,22 +9,22 @@ EncoderEvents encEvent = {0};
 
 void encoderhandleRotate(int8_t rotation)
 {
-    if (rotation > 0) // CW
-        mui.prevField();
-    else // CCW
-        mui.nextField();
+    // if (rotation > 0) // CW
+    //     mui.prevField();
+    // else // CCW
+    //     mui.nextField();
     sreenRedraw();
 }
 
 void encoderhandlePressRelease()
 {
-    mui.sendSelect();
+    // mui.sendSelect();
     sreenRedraw();
 }
 
 void encoderhandleLongPressRelease()
 {
-    mui.sendSelectWithExecuteOnSelectFieldSearch();
+    // mui.sendSelectWithExecuteOnSelectFieldSearch();
     sreenRedraw();
 }
 
