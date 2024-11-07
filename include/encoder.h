@@ -10,3 +10,4 @@ typedef struct EncoderEvents {
 extern EncoderEvents encEvent;
 
 void encoderSetup();
+void encoderLoop();

@@ -2,26 +2,32 @@
 #include "config.h"
 #include <Arduino.h>
 #include <Versatile_RotaryEncoder.h>
+#include "menu.h"
+#include "menu.h"
+#include "screen.h"
 
 Versatile_RotaryEncoder encoder(ENC_CLK, ENC_DT, ENC_SW);
-EncoderEvents encEvent = { 0 };
+EncoderEvents encEvent = {0};
 
 void encoderhandleRotate(int8_t rotation)
 {
-    if (rotation > 0)
-        encEvent.rotate = 2; // CW
-    else
-        encEvent.rotate = 1; // CCW
+    if (rotation > 0) // CW
+        mui.prevField();
+    else // CCW
+        mui.nextField();
+    sreenRedraw();
 }
 
 void encoderhandlePressRelease()
 {
-    encEvent.press = 1;
+    mui.sendSelect();
+    sreenRedraw();
 }
 
 void encoderhandleLongPressRelease()
 {
-    encEvent.longPress = 1;
+    mui.sendSelectWithExecuteOnSelectFieldSearch();
+    sreenRedraw();
 }
 
 void encoderEnablePwr()
@@ -38,4 +44,9 @@ void encoderSetup()
     encoder.setHandleRotate(encoderhandleRotate);
     encoder.setHandlePressRelease(encoderhandlePressRelease);
     encoder.setHandleLongPressRelease(encoderhandleLongPressRelease);
+}
+
+void encoderLoop()
+{
+    encoder.ReadEncoder();
 }

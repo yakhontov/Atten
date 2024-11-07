@@ -7,6 +7,12 @@
 #include "menu.h"
 
 U8G2_SSD1306_128X64_NONAME_F_4W_HW_SPI u8g2(U8G2_R0, SCR_CS, SCR_DC, SCR_RES);
+uint8_t needRedraw = 1;
+
+void sreenRedraw()
+{
+    needRedraw = 1;
+}
 
 void screenSetup()
 {
@@ -17,29 +23,25 @@ void screenSetup()
 
 void screenLoop()
 {
-    static uint8_t is_redraw = 1;
 
     u8g2.setFont(u8g2_font_helvR08_tr);
-    if (mui.isFormActive()) {
-        /* menu is active: draw the menu */
-        if (is_redraw) {
+    if (mui.isFormActive())
+    {
+        if (needRedraw)
+        {
             u8g2.firstPage();
-            do {
+            do
+            {
                 mui.draw();
             } while (u8g2.nextPage());
-            is_redraw = 0;
+            needRedraw = 0;
         }
-        /* handle events */
-        switch (u8g2.getMenuEvent()) {
-        case U8X8_MSG_GPIO_MENU_SELECT:
-            mui.sendSelect();
-            is_redraw = 1;
-            break;
-        }
-    } else {
-        /* menu not active: show something else */
+    }
+    else
+    {
         u8g2.firstPage();
-        do {
+        do
+        {
             u8g2.setCursor(0, 20);
             u8g2.print(millis());
         } while (u8g2.nextPage());
