@@ -2,4 +2,4 @@
 
 void screenSetup();
 void screenLoop();
-void sreenRedraw();
+void screenRedraw();

@@ -3,29 +3,31 @@
 #include <Arduino.h>
 #include <Versatile_RotaryEncoder.h>
 #include "screen.h"
+#include "speakers.h"
 
 Versatile_RotaryEncoder encoder(ENC_CLK, ENC_DT, ENC_SW);
-EncoderEvents encEvent = {0};
 
 void encoderhandleRotate(int8_t rotation)
 {
-    // if (rotation > 0) // CW
-    //     mui.prevField();
-    // else // CCW
-    //     mui.nextField();
-    sreenRedraw();
+    masterMute = 0;
+    if (rotation < 0) // CW
+        masterVolume++;
+    else // CCW
+        masterVolume--;
+    masterVolume = constrain(masterVolume, 0, maxVolume);
+    screenRedraw();
 }
 
 void encoderhandlePressRelease()
 {
-    // mui.sendSelect();
-    sreenRedraw();
+    masterMute = !masterMute;
+    screenRedraw();
 }
 
 void encoderhandleLongPressRelease()
 {
     // mui.sendSelectWithExecuteOnSelectFieldSearch();
-    sreenRedraw();
+    // sreenRedraw();
 }
 
 void encoderEnablePwr()
