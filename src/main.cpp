@@ -14,13 +14,18 @@
 
 void setup(void)
 {
+    Serial.begin(115200);
     encoderSetup();
     screenSetup();
     unsigned long seed;
     for (int i = 0; i <= 15; i++)
         seed = (seed << 1) ^ analogRead(i);
     randomSeed(seed);
-    screenShowBitmap(startupIcons[random(startupIconsCount)], 3000);
+    Serial.print(seed);
+    seed = random(startupIconsCount);
+    Serial.print(' ');
+    Serial.println(seed);
+    screenShowBitmap(startupBitmaps[seed], 3000);
 }
 
 void loop(void)

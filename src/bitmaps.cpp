@@ -1,9 +1,17 @@
 #include <Arduino.h>
 #include "bitmaps.h"
 
-const unsigned char *startupIcons[] = {
+const unsigned char *startupBitmaps[] = {
     imFromWillage,
     fresh,
-    letsDrink};
+    letsDrink,
+    bogdan,
+    stillworks};
 
-const int startupIconsCount = sizeof(startupIcons) / sizeof(startupIcons[0]);
+const int startupIconsCount = sizeof(startupBitmaps) / sizeof(startupBitmaps[0]);
+
+const unsigned char *speakerBitmaps[] = {
+    bmp_subwoofer,
+    bmp_center,
+    bmp_front,
+    bmp_rear};
