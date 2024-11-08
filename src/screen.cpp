@@ -36,21 +36,14 @@ void screenShowBalance(SpeakerType speakerType, uint32_t milliseconds)
     u8g2.firstPage();
     do
     {
-        u8g2.setBitmapMode(1);
+        // u8g2.setBitmapMode(1);
         u8g2.setFontMode(1);
-
-        // u8g2.drawXBMP(0, 0, 128, 64, speakerBitmaps[(int)speakerType]);
+        u8g2.drawXBMP(0, 0, 128, 64, speakerBitmaps[(int)speakerType]);
         // u8g2.drawFrame(0, 0, 128, 64);
         u8g2.setFont(u8g2_font_inb46_mn);
         int8_t balance = speakers[(int)speakerType].balance;
         u8g2.setCursor(abs(balance) < 10 ? 27 : 6, speakerType == Subwoofer ? 54 : (speakerType == Rear ? 45 : 63)); // u8g2_font_inb46_mn (abs(balance) < 10 ? 27 : 6, speakerType == Subwoofer ? 54 : (speakerType == Rear ? 45 : 63))
         u8g2.print((balance >= 0 ? "+" : "") + String(balance));
-
-        // u8g2.setFont(u8g2_font_inb46_mn);
-        // int8_t balance = speakers[(int)speakerType].balance;
-        // u8g2.setCursor(abs(balance) < 10 ? 39 : 13, speakerType == Subwoofer ? 60 : (speakerType == Rear ? 0 : 20));
-        // u8g2.print((balance >= 0 ? "+" : "") + String(balance));
-
     } while (u8g2.nextPage());
     showingBitmap = {millis(), milliseconds};
 }

@@ -11,11 +11,11 @@ void encoderhandleRotate(int8_t rotation)
 {
     masterMute = 0;
     if (rotation < 0) // CW
-                      // speakersSetMasterVolume(masterVolume + 1);
-        speakersSetBalance(Front, speakers[Front].balance + 1);
+        speakersSetMasterVolume(masterVolume + 1);
+    // speakersSetBalance(Subwoofer, speakers[Subwoofer].balance + 1);
     else // CCW
-         // speakersSetMasterVolume(masterVolume - 1);
-        speakersSetBalance(Front, speakers[Front].balance - 1);
+        speakersSetMasterVolume(masterVolume - 1);
+    // speakersSetBalance(Subwoofer, speakers[Subwoofer].balance - 1);
 }
 
 void encoderhandlePressRelease()

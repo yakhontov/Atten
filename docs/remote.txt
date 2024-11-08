@@ -1,0 +1,35 @@
+off
+Protocol=Samsung Address=0x7 Command=0xE6 Raw-Data=0x19E60707 32 bits LSB first
+
+vol+
+Protocol=Samsung Address=0x7 Command=0x7 Raw-Data=0xF8070707 32 bits LSB first
+
+vol-
+Protocol=Samsung Address=0x7 Command=0xB Raw-Data=0xF40B0707 32 bits LSB first
+
+mute
+Protocol=Samsung Address=0x7 Command=0xF Raw-Data=0xF00F0707 32 bits LSB firs
+
+ch+
+Protocol=Samsung Address=0x7 Command=0x12 Raw-Data=0xED120707 32 bits LSB first
+
+ch-
+Protocol=Samsung Address=0x7 Command=0x10 Raw-Data=0xEF100707 32 bits LSB first
+
+ch down
+Protocol=Samsung Address=0x7 Command=0x4F Raw-Data=0xB04F0707 32 bits LSB first
+
+up
+Protocol=Samsung Address=0x7 Command=0x60 Raw-Data=0x9F600707 32 bits LSB first
+
+down
+Protocol=Samsung Address=0x7 Command=0x61 Raw-Data=0x9E610707 32 bits LSB first
+
+left
+Protocol=Samsung Address=0x7 Command=0x65 Raw-Data=0x9A650707 32 bits LSB first
+
+right
+Protocol=Samsung Address=0x7 Command=0x62 Raw-Data=0x9D620707 32 bits LSB first
+
+ok
+Protocol=Samsung Address=0x7 Command=0x68 Raw-Data=0x97680707 32 bits LSB first

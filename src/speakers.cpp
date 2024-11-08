@@ -34,27 +34,28 @@ int8_t speakersSetMasterMute(int8_t mute)
     return masterMute;
 }
 
-// void setVolume(Atten *atten, int masterVolume, bool masterMute)
-// {
-// int volume = masterVolume + atten->balance;
-// if (masterMute || !atten->enabled)
-//     volume = 0;
-// volume = constrain(volume, 0, 63);
-// switch (atten->port) {
-// case 'A':
-//     PORTA = volume;
-//     break;
-// case 'C':
-//     PORTC = volume;
-//     break;
-// case 'F':
-//     PORTF = volume;
-//     break;
-// case 'K':
-//     PORTK = volume;
-//     break;
-// case 'L':
-//     PORTL = volume;
-//     break;
-// }
-// }
+void speakerOutVolume(SpeakerType speakerType)
+{
+    int volume = masterVolume + speakers[speakerType].balance;
+    if (masterMute || !speakers[speakerType].enabled)
+        volume = 0;
+    volume = constrain(volume, 0, maxVolume);
+    switch (speakers[speakerType].port)
+    {
+    case 'A':
+        PORTA = volume;
+        break;
+    case 'C':
+        PORTC = volume;
+        break;
+    case 'F':
+        PORTF = volume;
+        break;
+    case 'K':
+        PORTK = volume;
+        break;
+    case 'L':
+        PORTL = volume;
+        break;
+    }
+}
