@@ -48,5 +48,6 @@ void encoderSetup()
 
 void encoderLoop()
 {
-    encoder.ReadEncoder();
+    if (deviceEnabled)
+        encoder.ReadEncoder();
 }

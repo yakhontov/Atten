@@ -1,0 +1,101 @@
+off
+uint16_t address = 0x0;
+uint16_t command = 0xC;
+uint32_t data = 0x100C;
+
+mute
+uint16_t address = 0x0;
+uint16_t command = 0xD;
+uint32_t data = 0x180D;
+
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+
+menu
+uint16_t address = 0x0;
+uint16_t command = 0x3B;
+uint32_t data = 0x183B;
+
+tv/av
+uint16_t address = 0x0;
+uint16_t command = 0x38;
+uint32_t data = 0x1038;
+
+eye
+uint16_t address = 0x0;
+uint16_t command = 0x37;
+uint32_t data = 0x1037;
+
+i|ii
+
+uint16_t address = 0x0;
+uint16_t command = 0x36;
+uint32_t data = 0x1036;
+
+pr+
+uint16_t address = 0x0;
+uint16_t command = 0x20;
+uint32_t data = 0x1020;
+
+vol-
+uint16_t address = 0x0;
+uint16_t command = 0x11;
+uint32_t data = 0x1811;
+
+ok
+uint16_t address = 0x0;
+uint16_t command = 0x25;
+uint32_t data = 0x1025;
+
+vol+
+uint16_t address = 0x0;
+uint16_t command = 0x10;
+uint32_t data = 0x1810;
+
+pr-
+uint16_t address = 0x0;
+uint16_t command = 0x21;
+uint32_t data = 0x1021;
+
+q view
+uint16_t address = 0x0;
+uint16_t command = 0x32;
+uint32_t data = 0x1832;
+
+list
+uint16_t address = 0x0;
+uint16_t command = 0x34;
+uint32_t data = 0x1034;
+
+psm
+uint16_t address = 0x0;
+uint16_t command = 0xE;
+uint32_t data = 0x180E;
+
+ssm
+uint16_t address = 0x0;
+uint16_t command = 0x16;
+uint32_t data = 0x1016;
+
+sleep
+uint16_t address = 0x0;
+uint16_t command = 0x26;
+uint32_t data = 0x1826;
+
+picture
+uint16_t address = 0x0;
+uint16_t command = 0x13;
+uint32_t data = 0x1013;
+
+sound
+uint16_t address = 0x0;
+uint16_t command = 0x24;
+uint32_t data = 0x1824;
