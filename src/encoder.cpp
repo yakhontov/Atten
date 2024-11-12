@@ -12,22 +12,22 @@ void encoderhandleRotate(int8_t rotation)
     masterMute = 0;
     if (rotation < 0) // CW
         speakersSetMasterVolume(masterVolume + 1);
-    // speakersSetBalance(Subwoofer, speakers[Subwoofer].balance + 1);
     else // CCW
         speakersSetMasterVolume(masterVolume - 1);
-    // speakersSetBalance(Subwoofer, speakers[Subwoofer].balance - 1);
 }
 
 void encoderhandlePressRelease()
 {
-    // speakersSetMasterMute(!masterMute);
-    speakersSetBalance(Front, speakers[Front].balance);
+    // speakersSetMode(random(2), random(2), random(2), random(2));
+    if (speakersIsStereo())
+        speakersMch();
+    else
+        speakersStereo();
 }
 
 void encoderhandleLongPressRelease()
 {
-    // mui.sendSelectWithExecuteOnSelectFieldSearch();
-    // sreenRedraw();
+    speakersSaveVolume();
 }
 
 void encoderEnablePwr()

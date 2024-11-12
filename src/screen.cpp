@@ -11,6 +11,10 @@ U8G2_SSD1306_128X64_NONAME_F_4W_HW_SPI u8g2(U8G2_R0, SCR_CS, SCR_DC, SCR_RES);
 // https://github.com/olikraus/u8g2/wiki/fntgrpinconsolata
 // 42, 46, 49, 53, 57, 63
 
+// Pics creation:
+// https://onlinepngtools.com/create-monochrome-png
+// https://javl.github.io/image2cpp/
+
 struct
 {
     unsigned long start;
@@ -25,6 +29,35 @@ void screenShowBitmap(const unsigned char *bitmap, uint32_t milliseconds)
     do
     {
         u8g2.drawXBMP(0, 0, 128, 64, bitmap);
+    } while (u8g2.nextPage());
+    showingBitmap = {millis(), milliseconds};
+}
+
+void screenShowSpeakers(uint8_t subwoofer, uint8_t center, uint8_t front, uint8_t rear, uint32_t milliseconds)
+{
+    if (!milliseconds)
+        return;
+    // u8g2.setBitmapMode(0); // Включаем возмжность закрашивать нулевым цветом
+    u8g2.firstPage();
+    do
+    {
+        u8g2.setDrawColor(2);
+        if (!subwoofer)
+            u8g2.drawBox(43, 22, 43, 43);
+        if (!center)
+            u8g2.drawBox(43, 0, 43, 20);
+        if (!front)
+        {
+            u8g2.drawBox(0, 0, 43, 43);
+            u8g2.drawBox(86, 0, 43, 43);
+        }
+        if (!rear)
+        {
+            u8g2.drawBox(0, 43, 43, 43);
+            u8g2.drawBox(86, 43, 43, 43);
+        }
+        u8g2.drawXBMP(0, 0, 128, 64, bpm_speakers);
+
     } while (u8g2.nextPage());
     showingBitmap = {millis(), milliseconds};
 }
@@ -55,7 +88,7 @@ void screenShowMasterVolume()
     {
         if (masterMute)
         {
-            u8g2.drawXBMP(30, 0, 67, 64, mute_mitmap);
+            u8g2.drawXBMP(30, 0, 67, 64, bmp_mute);
         }
         else
         {

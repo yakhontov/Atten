@@ -13,7 +13,7 @@ Speaker speakers[] = {
 
 int8_t masterVolume = 0;
 uint8_t masterMute = 1;
-uint8_t deviceEnabled = 0;
+uint8_t deviceEnabled = 1;
 
 int8_t speakersSetBalance(SpeakerType speakerType, int8_t balance)
 {
@@ -37,35 +37,73 @@ int8_t speakersSetMasterMute(int8_t mute)
     return masterMute;
 }
 
-void speakerOutVolume(SpeakerType speakerType)
+void speakerSetupRelayPins(SpeakerType speakerType)
 {
-    int volume = masterVolume + speakers[speakerType].balance;
-    if (masterMute || !speakers[speakerType].enabled)
-        volume = 0;
-    volume = constrain(volume, 0, maxVolume);
     switch (speakers[speakerType].port)
     {
     case 'A':
-        PORTA = volume;
+        DDRA |= 0b111111;
         break;
     case 'C':
-        PORTC = volume;
+        DDRC |= 0b111111;
         break;
     case 'F':
-        PORTF = volume;
+        DDRF |= 0b111111;
         break;
     case 'K':
-        PORTK = volume;
+        DDRK |= 0b111111;
         break;
     case 'L':
-        PORTL = volume;
+        DDRL |= 0b111111;
         break;
     }
 }
 
-void speakersLoad()
+void speakersSetup()
 {
-    screenShowBitmap(letsDrink, 3000);
+    pinMode(POWER_FRONT_SUB, OUTPUT);
+    pinMode(POWER_REAR_CENTER, OUTPUT);
+    pinMode(POWER_DAC, OUTPUT);
+    pinMode(SWITCH_PC, OUTPUT);
+    pinMode(LED_STANDBY, OUTPUT);
+    for (int i = 0; i < 4; i++)
+        speakerSetupRelayPins((SpeakerType)i);
+}
+
+void speakersOutVolume(SpeakerType speakerType)
+{
+    int volume = masterVolume + speakers[speakerType].balance;
+    if (masterMute || !speakers[speakerType].enabled)
+        volume = 0;
+    volume = constrain(volume, 0, 0b111111);
+    switch (speakers[speakerType].port)
+    {
+    case 'A':
+        PORTA = (PORTA & 0b11000000) | volume;
+        break;
+    case 'C':
+        PORTC = (PORTC & 0b11000000) | volume;
+        break;
+    case 'F':
+        PORTF = (PORTF & 0b11000000) | volume;
+        break;
+    case 'K':
+        PORTK = (PORTK & 0b11000000) | volume;
+        break;
+    case 'L':
+        PORTL = (PORTL & 0b11000000) | volume;
+        break;
+    }
+}
+
+void speakersLoop()
+{
+    for (int i = 0; i < 4; i++)
+        speakerSetupRelayPins((SpeakerType)i);
+}
+
+void speakersLoadVolume()
+{
     int8_t v;
     for (int i = 0; i < 4; i++)
     {
@@ -78,39 +116,41 @@ void speakersLoad()
         masterVolume = v;
 }
 
-void speakersSave()
+void speakersSaveVolume()
 {
-    screenShowBitmap(stillworks, 3000);
+    screenShowBitmap(bmp_saved, 3000);
     for (int i = 0; i < 4; i++)
         EEPROM.update(i, speakers[i].balance);
     EEPROM.update(4, masterVolume);
 }
 
+void speakersSetMode(uint8_t subwoofer, uint8_t center, uint8_t front, uint8_t rear, long delayms = 0)
+{
+    screenShowSpeakers(subwoofer, center, front, rear, 3000);
+    delay(delayms);
+    speakers[Subwoofer].enabled = subwoofer;
+    speakers[Center].enabled = center;
+    speakers[Front].enabled = front;
+    speakers[Rear].enabled = rear;
+}
+
 void speakersStereo()
 {
-    screenShowBitmap(stillworks, 3000);
     masterMute = true;
+    speakersSetMode(true, false, true, false, 50);
     digitalWrite(POWER_DAC, HIGH);
-    speakersLoad();
-    speakers[Subwoofer].enabled = true;
-    speakers[Center].enabled = false;
-    speakers[Front].enabled = true;
-    speakers[Rear].enabled = false;
-    delay(250);
+    speakersLoadVolume();
+    delay(200);
     masterMute = false;
 }
 
 void speakersMch()
 {
-    screenShowBitmap(imFromWillage, 3000);
     masterMute = true;
+    speakersSetMode(true, true, true, true, 50);
     digitalWrite(POWER_DAC, LOW);
-    speakersLoad();
-    speakers[Subwoofer].enabled = true;
-    speakers[Center].enabled = true;
-    speakers[Front].enabled = true;
-    speakers[Rear].enabled = true;
-    delay(250);
+    speakersLoadVolume();
+    delay(200);
     masterMute = false;
 }
 
@@ -121,7 +161,6 @@ int8_t speakersToggleEnabled(SpeakerType speakerType, int8_t enabled) { return s
 
 void powerOn()
 {
-    // MUTE + delay(250) + POWER_FRONT_SUB=0, POWER_REAR_CENTER=0
     deviceEnabled = true;
     speakersStereo();
 }

@@ -40,10 +40,10 @@ void irLoop()
                 togglePc();
                 break;
             case 0x25: // ok
-                speakersLoad();
+                speakersLoadVolume();
                 break;
             case 0x36: // iii
-                speakersSave();
+                speakersSaveVolume();
                 break;
             case 0x00: // 0 stereo/mch
                 if (speakersIsStereo)

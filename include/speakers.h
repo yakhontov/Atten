@@ -24,13 +24,16 @@ extern uint8_t deviceEnabled;
 
 void powerOn();
 void powerOff();
-void speakersSave();
-void speakersLoad();
+void speakersSaveVolume();
+void speakersLoadVolume();
 uint8_t speakersIsStereo();
 void speakersStereo();
 void speakersMch();
+void speakersSetup();
+void speakersLoop();
 int8_t speakersSetMasterVolume(int8_t volume);
 int8_t speakersSetMasterMute(int8_t volume);
 int8_t speakersSetBalance(SpeakerType speakerType, int8_t balance);
 int8_t speakersChangeBalance(SpeakerType speakerType, int8_t change);
 int8_t speakersToggleEnabled(SpeakerType speakerType, int8_t enabled);
+void speakersSetMode(uint8_t subwoofer, uint8_t center, uint8_t front, uint8_t rear, long delayms = 0);
