@@ -67,23 +67,23 @@ void speakersLoad()
 {
     screenShowBitmap(letsDrink, 3000);
     int8_t v;
-    v = EEPROM.read(0);
-    if (v >= 0 && v <= maxVolume)
-        masterVolume = v;
-    for (int i = 1; i < 5; i++)
+    for (int i = 0; i < 4; i++)
     {
         v = (int8_t)EEPROM.read(i);
         if (v >= -maxVolume && v <= maxVolume)
             speakers[i].balance = v;
     }
+    v = EEPROM.read(4);
+    if (v >= 0 && v <= maxVolume)
+        masterVolume = v;
 }
 
 void speakersSave()
 {
     screenShowBitmap(stillworks, 3000);
-    EEPROM.update(0, masterVolume);
-    for (int i = 1; i < 5; i++)
-        EEPROM.update(i, (uint8_t)speakers[i].balance);
+    for (int i = 0; i < 4; i++)
+        EEPROM.update(i, speakers[i].balance);
+    EEPROM.update(4, masterVolume);
 }
 
 void speakersStereo()
@@ -113,6 +113,11 @@ void speakersMch()
     delay(250);
     masterMute = false;
 }
+
+uint8_t speakersIsStereo() { return digitalRead(POWER_DAC); };
+
+int8_t speakersChangeBalance(SpeakerType speakerType, int8_t change) { return speakersSetBalance(speakerType, speakers[speakerType].balance + change); };
+int8_t speakersToggleEnabled(SpeakerType speakerType, int8_t enabled) { return speakers[speakerType].enabled = !speakers[speakerType].enabled; };
 
 void powerOn()
 {

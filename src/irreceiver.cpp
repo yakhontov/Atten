@@ -34,7 +34,7 @@ void irLoop()
             switch (IrReceiver.decodedIRData.command)
             {
             case 0x0C: // off
-                powerOFF();
+                powerOff();
                 break;
             case 0x38: // tv/av
                 togglePc();
