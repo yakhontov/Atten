@@ -4,6 +4,7 @@
 #include "config.h"
 #include "screen.h"
 #include "bitmaps.h"
+#include "log.h"
 
 Speaker speakers[] = {
     {SUB_PORT, true, 0},
@@ -17,6 +18,7 @@ uint8_t deviceEnabled = 1;
 
 int8_t speakersSetBalance(SpeakerType speakerType, int8_t balance)
 {
+    LOGP(speakerType);
     speakers[speakerType].balance = constrain(balance, -maxVolume, maxVolume);
     screenShowBalance(speakerType, 3000);
     return speakers[speakerType].balance;
@@ -24,6 +26,7 @@ int8_t speakersSetBalance(SpeakerType speakerType, int8_t balance)
 
 int8_t speakersSetMasterVolume(int8_t volume)
 {
+    LOGP(volume);
     masterMute = 0;
     masterVolume = constrain(volume, 0, maxVolume);
     screenShowMasterVolume();
@@ -32,6 +35,7 @@ int8_t speakersSetMasterVolume(int8_t volume)
 
 int8_t speakersSetMasterMute(int8_t mute)
 {
+    LOGP(mute);
     masterMute = mute;
     screenShowMasterVolume();
     return masterMute;
@@ -104,6 +108,7 @@ void speakersLoop()
 
 void speakersLoadVolume()
 {
+    LOG;
     int8_t v;
     for (int i = 0; i < 4; i++)
     {
@@ -118,15 +123,17 @@ void speakersLoadVolume()
 
 void speakersSaveVolume()
 {
+    LOG;
     screenShowBitmap(bmp_saved, 3000);
     for (int i = 0; i < 4; i++)
         EEPROM.update(i, speakers[i].balance);
     EEPROM.update(4, masterVolume);
 }
 
-void speakersSetMode(uint8_t subwoofer, uint8_t center, uint8_t front, uint8_t rear, long delayms = 0)
+void speakersSetMode(uint8_t subwoofer, uint8_t center, uint8_t front, uint8_t rear, long delayms = 0, uint32_t swowms = 3000)
 {
-    screenShowSpeakers(subwoofer, center, front, rear, 3000);
+    LOGP(String(subwoofer) + String(center) + String(front) + String(rear));
+    screenShowSpeakers(subwoofer, center, front, rear, swowms);
     delay(delayms);
     speakers[Subwoofer].enabled = subwoofer;
     speakers[Center].enabled = center;
@@ -134,10 +141,11 @@ void speakersSetMode(uint8_t subwoofer, uint8_t center, uint8_t front, uint8_t r
     speakers[Rear].enabled = rear;
 }
 
-void speakersStereo()
+void speakersStereo(uint32_t show = 3000)
 {
+    LOG;
     masterMute = true;
-    speakersSetMode(true, false, true, false, 50);
+    speakersSetMode(true, false, true, false, 50, show);
     digitalWrite(POWER_DAC, HIGH);
     speakersLoadVolume();
     delay(200);
@@ -146,6 +154,7 @@ void speakersStereo()
 
 void speakersMch()
 {
+    LOG;
     masterMute = true;
     speakersSetMode(true, true, true, true, 50);
     digitalWrite(POWER_DAC, LOW);
@@ -161,12 +170,16 @@ int8_t speakersToggleEnabled(SpeakerType speakerType, int8_t enabled) { return s
 
 void powerOn()
 {
+    LOG;
     deviceEnabled = true;
-    speakersStereo();
+    screenEnable(true);
+    speakersStereo(0);
+    screenShowBitmap(startupBitmaps[random(startupIconsCount)], 3000);
 }
 
 void powerOff()
 {
+    LOG;
     deviceEnabled = false;
-    // clear screen
+    screenShowBitmap(startupBitmaps[random(startupIconsCount)], 3000);
 }

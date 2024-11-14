@@ -6,7 +6,9 @@ const unsigned char *startupBitmaps[] = {
     fresh,
     letsDrink,
     bogdan,
-    stillworks};
+    stillworks,
+    bmp_super,
+    bmp_smoke};
 
 const int startupIconsCount = sizeof(startupBitmaps) / sizeof(startupBitmaps[0]);
 

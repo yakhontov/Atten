@@ -4,11 +4,13 @@
 #include <Versatile_RotaryEncoder.h>
 #include "screen.h"
 #include "speakers.h"
+#include "log.h"
 
 Versatile_RotaryEncoder encoder(ENC_CLK, ENC_DT, ENC_SW);
 
 void encoderhandleRotate(int8_t rotation)
 {
+    LOGP(rotation);
     masterMute = 0;
     if (rotation < 0) // CW
         speakersSetMasterVolume(masterVolume + 1);
@@ -18,11 +20,15 @@ void encoderhandleRotate(int8_t rotation)
 
 void encoderhandlePressRelease()
 {
-    // speakersSetMode(random(2), random(2), random(2), random(2));
-    if (speakersIsStereo())
-        speakersMch();
+    LOG;
+    if (deviceEnabled)
+        powerOff();
     else
-        speakersStereo();
+        powerOn();
+    // if (speakersIsStereo())
+    //     speakersMch();
+    // else
+    //     speakersStereo();
 }
 
 void encoderhandleLongPressRelease()
@@ -48,6 +54,6 @@ void encoderSetup()
 
 void encoderLoop()
 {
-    if (deviceEnabled)
+    //if (deviceEnabled)
         encoder.ReadEncoder();
 }

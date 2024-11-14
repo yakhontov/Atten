@@ -4,6 +4,7 @@
 #include "speakers.h"
 #include "screen.h"
 #include "bitmaps.h"
+#include "log.h"
 
 void irSetup()
 {
@@ -12,6 +13,7 @@ void irSetup()
 
 void togglePc()
 {
+    LOG;
     screenShowBitmap(bogdan, 3000);
     digitalWrite(SWITCH_PC, HIGH);
     delay(600);
@@ -23,6 +25,7 @@ void irLoop()
     if (IrReceiver.decode())
     {
         IrReceiver.resume();
+        LOGP("adr=" + String(IrReceiver.decodedIRData.address) + ", cmd" + String(IrReceiver.decodedIRData.command));
         if (IrReceiver.decodedIRData.address == 0x00)
         {
             if (!deviceEnabled)

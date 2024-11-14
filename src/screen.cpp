@@ -5,15 +5,12 @@
 #include "encoder.h"
 #include "bitmaps.h"
 #include "speakers.h"
+#include "log.h"
 
 U8G2_SSD1306_128X64_NONAME_F_4W_HW_SPI u8g2(U8G2_R0, SCR_CS, SCR_DC, SCR_RES);
 // u8g2_font_inb63_mn
 // https://github.com/olikraus/u8g2/wiki/fntgrpinconsolata
 // 42, 46, 49, 53, 57, 63
-
-// Pics creation:
-// https://onlinepngtools.com/create-monochrome-png
-// https://javl.github.io/image2cpp/
 
 struct
 {
@@ -23,6 +20,7 @@ struct
 
 void screenShowBitmap(const unsigned char *bitmap, uint32_t milliseconds)
 {
+    LOG;
     if (!milliseconds)
         return;
     u8g2.firstPage();
@@ -35,6 +33,7 @@ void screenShowBitmap(const unsigned char *bitmap, uint32_t milliseconds)
 
 void screenShowSpeakers(uint8_t subwoofer, uint8_t center, uint8_t front, uint8_t rear, uint32_t milliseconds)
 {
+    LOGP(String(subwoofer) + String(center) + String(front) + String(rear));
     if (!milliseconds)
         return;
     // u8g2.setBitmapMode(0); // Включаем возмжность закрашивать нулевым цветом
@@ -64,6 +63,7 @@ void screenShowSpeakers(uint8_t subwoofer, uint8_t center, uint8_t front, uint8_
 
 void screenShowBalance(SpeakerType speakerType, uint32_t milliseconds)
 {
+    LOG;
     if (!milliseconds)
         return;
     u8g2.firstPage();
@@ -83,6 +83,7 @@ void screenShowBalance(SpeakerType speakerType, uint32_t milliseconds)
 
 void screenShowMasterVolume()
 {
+    LOG;
     u8g2.firstPage();
     do
     {
@@ -104,11 +105,27 @@ void screenSetup()
     u8g2.begin();
 }
 
+void screenEnable(uint8_t enable)
+{
+    LOGP(String(enable) + " de=" + String(deviceEnabled));
+    u8g2.setPowerSave(!enable);
+}
+
 void screenLoop()
 {
     if (showingBitmap.duration && millis() - showingBitmap.start > showingBitmap.duration)
     {
+        LOGP("de=" + String(deviceEnabled));
+        if (deviceEnabled)
+            screenShowMasterVolume();
+        else
+        {
+            do
+            {
+                u8g2.clear();
+            } while (u8g2.nextPage());
+            screenEnable(false);
+        }
         showingBitmap.duration = 0;
-        screenShowMasterVolume();
     }
 }
