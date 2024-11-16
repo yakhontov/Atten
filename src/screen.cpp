@@ -31,32 +31,36 @@ void screenShowBitmap(const unsigned char *bitmap, uint32_t milliseconds)
     showingBitmap = {millis(), milliseconds};
 }
 
+void screenDrawSpeakers(uint8_t subwoofer, uint8_t center, uint8_t front, uint8_t rear)
+{
+    u8g2.drawXBMP(0, 0, 128, 64, bpm_speakers);
+    u8g2.setDrawColor(0);
+    if (!subwoofer)
+        u8g2.drawBox(43, 22, 43, 43);
+    if (!center)
+        u8g2.drawBox(43, 0, 43, 20);
+    if (!front)
+    {
+        u8g2.drawBox(0, 0, 43, 43);
+        u8g2.drawBox(86, 0, 43, 43);
+    }
+    if (!rear)
+    {
+        u8g2.drawBox(0, 43, 43, 43);
+        u8g2.drawBox(86, 43, 43, 43);
+    }
+    u8g2.setDrawColor(1);
+}
+
 void screenShowSpeakers(uint8_t subwoofer, uint8_t center, uint8_t front, uint8_t rear, uint32_t milliseconds)
 {
     LOGP(String(subwoofer) + String(center) + String(front) + String(rear));
     if (!milliseconds)
         return;
-    // u8g2.setBitmapMode(0); // Включаем возмжность закрашивать нулевым цветом
     u8g2.firstPage();
     do
     {
-        u8g2.setDrawColor(2);
-        if (!subwoofer)
-            u8g2.drawBox(43, 22, 43, 43);
-        if (!center)
-            u8g2.drawBox(43, 0, 43, 20);
-        if (!front)
-        {
-            u8g2.drawBox(0, 0, 43, 43);
-            u8g2.drawBox(86, 0, 43, 43);
-        }
-        if (!rear)
-        {
-            u8g2.drawBox(0, 43, 43, 43);
-            u8g2.drawBox(86, 43, 43, 43);
-        }
-        u8g2.drawXBMP(0, 0, 128, 64, bpm_speakers);
-
+        screenDrawSpeakers(subwoofer, center, front, rear);
     } while (u8g2.nextPage());
     showingBitmap = {millis(), milliseconds};
 }
@@ -69,13 +73,17 @@ void screenShowBalance(SpeakerType speakerType, uint32_t milliseconds)
     u8g2.firstPage();
     do
     {
-        // u8g2.setBitmapMode(1);
+        if (speakerType == Subwoofer)
+            u8g2.drawXBMP(0, 11, 42, 42, bmp_subsmall);
+        else
+            screenDrawSpeakers(speakerType == Subwoofer, speakerType == Center, speakerType == Front, speakerType == Rear);
         u8g2.setFontMode(1);
-        u8g2.drawXBMP(0, 0, 128, 64, speakerBitmaps[(int)speakerType]);
-        // u8g2.drawFrame(0, 0, 128, 64);
-        u8g2.setFont(u8g2_font_inb46_mn);
+        u8g2.setFont(u8g2_font_inb38_mn);
         int8_t balance = speakers[(int)speakerType].balance;
-        u8g2.setCursor(abs(balance) < 10 ? 27 : 6, speakerType == Subwoofer ? 54 : (speakerType == Rear ? 45 : 63)); // u8g2_font_inb46_mn (abs(balance) < 10 ? 27 : 6, speakerType == Subwoofer ? 54 : (speakerType == Rear ? 45 : 63))
+        if (speakerType == Subwoofer)
+            u8g2.setCursor(abs(balance) < 10 ? 54 : 38, 50);
+        else
+            u8g2.setCursor(abs(balance) < 10 ? 32 : 16, speakerType == Rear ? 38 : 63);
         u8g2.print((balance >= 0 ? "+" : "") + String(balance));
     } while (u8g2.nextPage());
     showingBitmap = {millis(), milliseconds};
@@ -94,7 +102,7 @@ void screenShowMasterVolume()
         else
         {
             u8g2.setFont(u8g2_font_inb63_mn);
-            u8g2.setCursor(masterVolume < 10 ? 39 : 13, 63);
+            u8g2.setCursor(masterVolume < 10 ? 39 : 13, 62);
             u8g2.print(masterVolume);
         }
     } while (u8g2.nextPage());

@@ -7,10 +7,10 @@
 #include "log.h"
 
 Speaker speakers[] = {
-    {SUB_PORT, true, 0},
-    {CENTER_PORT, true, 0},
-    {FRONT_PORT, true, 0},
-    {REAR_PORT, true, 0}};
+    {SUB_PORT, 1, 0},
+    {CENTER_PORT, 1, 0},
+    {FRONT_PORT, 1, 0},
+    {REAR_PORT, 1, 0}};
 
 int8_t masterVolume = 0;
 uint8_t masterMute = 1;
@@ -19,6 +19,7 @@ uint8_t deviceEnabled = 1;
 int8_t speakersSetBalance(SpeakerType speakerType, int8_t balance)
 {
     LOGP(speakerType);
+    speakers[speakerType].enabled = 1;
     speakers[speakerType].balance = constrain(balance, -maxVolume, maxVolume);
     screenShowBalance(speakerType, 3000);
     return speakers[speakerType].balance;
@@ -130,7 +131,7 @@ void speakersSaveVolume()
     EEPROM.update(4, masterVolume);
 }
 
-void speakersSetMode(uint8_t subwoofer, uint8_t center, uint8_t front, uint8_t rear, long delayms = 0, uint32_t swowms = 3000)
+void speakersSetMode(int8_t subwoofer, int8_t center, int8_t front, int8_t rear, long delayms = 0, uint32_t swowms = 3000)
 {
     LOGP(String(subwoofer) + String(center) + String(front) + String(rear));
     screenShowSpeakers(subwoofer, center, front, rear, swowms);
@@ -163,10 +164,26 @@ void speakersMch()
     masterMute = false;
 }
 
-uint8_t speakersIsStereo() { return digitalRead(POWER_DAC); };
+uint8_t speakersIsStereo()
+{
+    return digitalRead(POWER_DAC);
+};
 
-int8_t speakersChangeBalance(SpeakerType speakerType, int8_t change) { return speakersSetBalance(speakerType, speakers[speakerType].balance + change); };
-int8_t speakersToggleEnabled(SpeakerType speakerType, int8_t enabled) { return speakers[speakerType].enabled = !speakers[speakerType].enabled; };
+int8_t speakersChangeBalance(SpeakerType speakerType, int8_t change)
+{
+    LOGP(String(speakerType) + " " + String(change));
+    int8_t bal = speakersSetBalance(speakerType, speakers[speakerType].balance + change);
+    screenShowBalance(speakerType, 3000);
+    return bal;
+};
+
+int8_t speakersToggleEnabled(SpeakerType speakerType)
+{
+    LOGP(String(speakerType));
+    speakers[speakerType].enabled = !speakers[speakerType].enabled;
+    screenShowSpeakers(speakers[Subwoofer].enabled, speakers[Center].enabled, speakers[Front].enabled, speakers[Rear].enabled, 3000);
+    return speakers[speakerType].enabled;
+};
 
 void powerOn()
 {

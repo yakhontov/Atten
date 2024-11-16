@@ -21,14 +21,10 @@ void encoderhandleRotate(int8_t rotation)
 void encoderhandlePressRelease()
 {
     LOG;
-    if (deviceEnabled)
-        powerOff();
+    if (speakersIsStereo())
+        speakersMch();
     else
-        powerOn();
-    // if (speakersIsStereo())
-    //     speakersMch();
-    // else
-    //     speakersStereo();
+        speakersStereo();
 }
 
 void encoderhandleLongPressRelease()
