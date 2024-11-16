@@ -22,9 +22,9 @@ void encoderhandlePressRelease()
 {
     LOG;
     if (speakersIsStereo())
-        speakersMch();
+        speakersSwitchToMch();
     else
-        speakersStereo();
+        speakersSwitchToStereo();
 }
 
 void encoderhandleLongPressRelease()
@@ -50,6 +50,6 @@ void encoderSetup()
 
 void encoderLoop()
 {
-    //if (deviceEnabled)
-        encoder.ReadEncoder();
+    // if (deviceEnabled)
+    encoder.ReadEncoder();
 }

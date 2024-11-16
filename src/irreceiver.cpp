@@ -35,6 +35,7 @@ void irLoop()
                     delay(500);
                     // IrReceiver.resume();
                 }
+                IrReceiver.resume();
                 return;
             }
             switch (IrReceiver.decodedIRData.command)
@@ -56,9 +57,9 @@ void irLoop()
                 break;
             case 0x00: // 0 stereo/mch
                 if (speakersIsStereo())
-                    speakersMch();
+                    speakersSwitchToMch();
                 else
-                    speakersStereo();
+                    speakersSwitchToStereo();
                 break;
 
             case 0x10: // vol+

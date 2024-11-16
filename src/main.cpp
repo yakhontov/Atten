@@ -20,7 +20,7 @@ void setup(void)
     encoderSetup();
     screenSetup();
     irSetup();
-    powerOn();
+    powerOff();
 }
 
 void loop(void)
