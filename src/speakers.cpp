@@ -81,6 +81,8 @@ void speakersSetup()
     pinMode(POWER_DAC, OUTPUT);
     pinMode(SWITCH_PC, OUTPUT);
     pinMode(LED_STANDBY, OUTPUT);
+    pinMode(STEREO_BTN, INPUT_PULLUP);
+    pinMode(MCH_BTN, INPUT_PULLUP);
     for (int i = 0; i < 4; i++)
         speakerSetupRelayPins((SpeakerType)i);
 }
@@ -113,6 +115,22 @@ void speakersOutVolume(SpeakerType speakerType)
 
 void speakersLoop()
 {
+    static int8_t stereoBtnState = 1;
+    if (digitalRead(STEREO_BTN) != stereoBtnState)
+    {
+        stereoBtnState = !stereoBtnState;
+        if (stereoBtnState)
+            speakersSwitchToStereo();
+    }
+
+    static int8_t mchBtnState = 1;
+    if (digitalRead(MCH_BTN) != mchBtnState)
+    {
+        mchBtnState = !mchBtnState;
+        if (mchBtnState)
+            speakersSwitchToMch();
+    }
+
     for (int i = 0; i < 4; i++)
         speakersOutVolume((SpeakerType)i);
 }

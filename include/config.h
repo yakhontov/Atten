@@ -16,6 +16,8 @@ const int POWER_DAC = 5;         // питание stereo DAC (PB3)
 const int SWITCH_PC = 4;         // замыкание кнопки питания компа (PB2)
 const int LED_STANDBY = 3;       // выход на светодиод дежурного режима
 const int POWER_BTN = A6;
+const int STEREO_BTN = A7;
+const int MCH_BTN = 7;
 
 // SpeakerType
 const char SUB_PORT = 'A', CENTER_PORT = 'C', FRONT_PORT = 'F', REAR_PORT = 'K';
