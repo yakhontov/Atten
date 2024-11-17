@@ -50,6 +50,6 @@ void encoderSetup()
 
 void encoderLoop()
 {
-    // if (deviceEnabled)
-    encoder.ReadEncoder();
+    if (deviceEnabled)
+        encoder.ReadEncoder();
 }

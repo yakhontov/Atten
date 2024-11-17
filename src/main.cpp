@@ -10,6 +10,7 @@
 
 void setup(void)
 {
+    pinMode(POWER_BTN, INPUT_PULLUP);
     Serial.begin(115200);
     LOG;
     unsigned long seed;
@@ -25,6 +26,18 @@ void setup(void)
 
 void loop(void)
 {
+    static int8_t pwrBtnState = 1;
+    if (digitalRead(POWER_BTN) != pwrBtnState)
+    {
+        if (pwrBtnState)
+        {
+            if (deviceEnabled)
+                powerOff();
+            else
+                powerOn();
+        }
+        pwrBtnState = !pwrBtnState;
+    }
     encoderLoop();
     irLoop();
     screenLoop();

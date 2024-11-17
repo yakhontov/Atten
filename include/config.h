@@ -15,6 +15,7 @@ const int POWER_REAR_CENTER = 6; // питание тылов и центра(PB
 const int POWER_DAC = 5;         // питание stereo DAC (PB3)
 const int SWITCH_PC = 4;         // замыкание кнопки питания компа (PB2)
 const int LED_STANDBY = 3;       // выход на светодиод дежурного режима
+const int POWER_BTN = A6;
 
 // SpeakerType
 const char SUB_PORT = 'A', CENTER_PORT = 'C', FRONT_PORT = 'F', REAR_PORT = 'K';
