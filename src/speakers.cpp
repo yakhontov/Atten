@@ -164,10 +164,10 @@ void speakersSetMode(int8_t subwoofer, int8_t center, int8_t front, int8_t rear)
     LOGP(String(subwoofer) + String(center) + String(front) + String(rear));
     for (int i = 0; i < 4; i++) // При смене режима работы сначала глушим все динамики. Включатся они сами в основном цикле программы
         speakersOutVolume((SpeakerType)i);
-    delay(50);                                         // Ждем пока пройдут переходные процессы
-    digitalWrite(POWER_FRONT_SUB, subwoofer || front); // При необходимости включаем питание саба и фронта
-    digitalWrite(POWER_REAR_CENTER, center || rear);   // При необходимости включаем питание центра и тыла
-    // Активируем соответстующие каналы
+    delay(50); // Ждем пока пройдут переходные процессы
+    // digitalWrite(POWER_FRONT_SUB, subwoofer || front); // При необходимости включаем питание саба и фронта
+    // digitalWrite(POWER_REAR_CENTER, center || rear);   // При необходимости включаем питание центра и тыла
+    //  Активируем соответстующие каналы
     speakers[Subwoofer].enabled = subwoofer;
     speakers[Center].enabled = center;
     speakers[Front].enabled = front;
@@ -181,39 +181,51 @@ void speakersSwitchToStereo(int8_t showPicture)
         screenShowSpeakers(true, false, true, false, 3000);
     speakersSetMode(true, false, true, false);
     digitalWrite(POWER_DAC, HIGH); // В стерео режиме включаем DAC
-    speakersLoadVolume();          // При переключении режима перезагружаем значение громкости из EEPROM
-    delay(200);                    // Ждем пока пройдут переходные процессы
+    digitalWrite(POWER_REAR_CENTER, LOW);
+    speakersLoadVolume(); // При переключении режима перезагружаем значение громкости из EEPROM
+    delay(200);           // Ждем пока пройдут переходные процессы
 }
 
-void speakersSwitchToMch()
+void speakersSwitchToMch(int8_t showPicture)
 {
     LOG;
-    screenShowSpeakers(true, true, true, true, 3000);
+    if (showPicture) // Картинку можно отключить, чтобы не мешала при старте системы
+        screenShowSpeakers(true, true, true, true, 3000);
     speakersSetMode(true, true, true, true);
     digitalWrite(POWER_DAC, LOW); // В режиме MCH отключаем DAC
-    speakersLoadVolume();         // При переключении режима перезагружаем значение громкости из EEPROM
-    delay(200);                   // Ждем пока пройдут переходные процессы
+    digitalWrite(POWER_REAR_CENTER, HIGH);
+    speakersLoadVolume(); // При переключении режима перезагружаем значение громкости из EEPROM
+    delay(200);           // Ждем пока пройдут переходные процессы
 }
 
 int8_t speakersIsStereo()
 {
     return digitalRead(POWER_DAC); // Включен ли стерео режим определяем по факту включенного DAC
-};
+}
 
-void powerOn()
+void powerOn(bool stereoMode)
 {
     LOG;
     deviceEnabled = true;
+    blackScreenMode = false;
     digitalWrite(LED_STANDBY, LOW);
+    digitalWrite(POWER_FRONT_SUB, HIGH);
     screenEnable(true);
     screenShowBitmap(startupBitmaps[random(startupIconsCount)], 3000);
-    speakersSwitchToStereo(false); // При включении скрываем картику переключения режима, чтобы она не перекрывала заставку
+    if (stereoMode)
+        speakersSwitchToStereo(false); // При включении скрываем картику переключения режима, чтобы она не перекрывала заставку
+    else
+        speakersSwitchToMch(false);
 }
 
 void powerOff()
 {
     LOG;
     deviceEnabled = false;
+    digitalWrite(POWER_DAC, LOW);
+    digitalWrite(POWER_FRONT_SUB, LOW);
+    digitalWrite(POWER_REAR_CENTER, LOW);
     digitalWrite(LED_STANDBY, HIGH);
-    screenShowBitmap(startupBitmaps[random(startupIconsCount)], 3000);
+    if (millis() > 500)
+        screenShowBitmap(startupBitmaps[random(startupIconsCount)], 3000);
 }

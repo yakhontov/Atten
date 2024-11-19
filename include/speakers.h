@@ -22,13 +22,13 @@ extern int8_t masterVolume;
 extern int8_t masterMute;
 extern int8_t deviceEnabled;
 
-void powerOn();
+void powerOn(bool stereoMode);
 void powerOff();
 void speakersSaveVolume();
 void speakersLoadVolume();
 int8_t speakersIsStereo();
 void speakersSwitchToStereo(int8_t showPicture = true);
-void speakersSwitchToMch();
+void speakersSwitchToMch(int8_t showPicture = true);
 void speakersSetup();
 void speakersLoop();
 int8_t speakersSetMasterVolume(int8_t volume);

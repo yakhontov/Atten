@@ -18,6 +18,8 @@ struct
     unsigned long duration;
 } showingBitmap = {0};
 
+int8_t blackScreenMode = 0;
+
 void screenShowBitmap(const unsigned char *bitmap, uint32_t milliseconds)
 {
     LOG;
@@ -89,6 +91,24 @@ void screenShowBalance(SpeakerType speakerType, uint32_t milliseconds)
     showingBitmap = {millis(), milliseconds};
 }
 
+void screenSetBlackMode(int8_t bsm)
+{
+    blackScreenMode = bsm;
+    if (bsm)
+    {
+        u8g2.firstPage();
+        while (u8g2.nextPage())
+            ;
+    }
+    else
+        screenShowMasterVolume();
+}
+
+void screenToggleBlackMode()
+{
+    screenSetBlackMode(!blackScreenMode);
+}
+
 void screenShowMasterVolume()
 {
     LOG;
@@ -106,6 +126,8 @@ void screenShowMasterVolume()
             u8g2.print(masterVolume);
         }
     } while (u8g2.nextPage());
+    if (blackScreenMode)
+        showingBitmap = {millis(), 3000};
 }
 
 void screenSetup()
@@ -123,11 +145,17 @@ void screenLoop()
 {
     if (showingBitmap.duration && millis() - showingBitmap.start > showingBitmap.duration)
     {
-        LOGP("de=" + String(deviceEnabled));
+        LOGP("de=" + String(deviceEnabled) + ", bsm=" + String(blackScreenMode));
         if (deviceEnabled)
-            screenShowMasterVolume();
+        {
+            if (blackScreenMode)
+                screenSetBlackMode(true);
+            else
+                screenShowMasterVolume();
+        }
         else
         {
+            u8g2.firstPage();
             do
             {
                 u8g2.clear();

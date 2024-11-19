@@ -34,7 +34,7 @@ void loop(void)
             if (deviceEnabled)
                 powerOff();
             else
-                powerOn();
+                powerOn(true);
         }
         pwrBtnState = !pwrBtnState;
     }

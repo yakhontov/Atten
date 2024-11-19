@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 // Screen
-const int SCR_CS = A13, SCR_DC = A14, SCR_RES = A15;
+const int SCR_CS = 42, SCR_DC = A14, SCR_RES = A15;
 
 // Encoder input
 const int ENC_CLK = 12, ENC_DT = 11, ENC_SW = 10, ENC_VCC = 9, ENC_GND = 8;
@@ -17,7 +17,7 @@ const int SWITCH_PC = 4;         // замыкание кнопки питани
 const int LED_STANDBY = 3;       // выход на светодиод дежурного режима
 const int POWER_BTN = A6;
 const int STEREO_BTN = A7;
-const int MCH_BTN = 7;
+const int MCH_BTN = 43;
 
 // SpeakerType
 const char SUB_PORT = 'A', CENTER_PORT = 'C', FRONT_PORT = 'F', REAR_PORT = 'K';
