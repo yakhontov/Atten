@@ -46,7 +46,7 @@ void irLoop()
                 case 0x36: // iii
                     speakersSaveVolume();
                     break;
-                case 0x00: // 0 stereo/mch
+                case 0x13: // 0 stereo/mch
                     if (speakersIsStereo())
                         speakersSwitchToMch();
                     else
@@ -114,7 +114,7 @@ void irLoop()
             else
                 switch (IrReceiver.decodedIRData.command)
                 {
-                case 0x00: // 0 - stereo/mch
+                case 0x13: // 0 - stereo/mch
                     powerOn(false);
                     delay(500);
                     break;

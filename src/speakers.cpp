@@ -92,7 +92,7 @@ void speakersOutVolume(SpeakerType speakerType)
     int volume = masterVolume + speakers[speakerType].balance;
     if (masterMute || !speakers[speakerType].enabled)
         volume = 0;
-    volume = constrain(volume, 0, 0b111111);
+    volume = 0b111111 - constrain(volume, 0, 0b111111); // Инверсия громкости. Обусловлено схемотехникой
     switch (speakers[speakerType].port)
     {
     case 'A':
