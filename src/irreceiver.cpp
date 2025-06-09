@@ -16,9 +16,9 @@ void togglePc()
     LOG;
     if (deviceEnabled)
         screenShowBitmap(bmp_pc, 3000);
-    digitalWrite(SWITCH_PC, HIGH);
-    delay(600);
     digitalWrite(SWITCH_PC, LOW);
+    delay(600);
+    digitalWrite(SWITCH_PC, HIGH);
 }
 
 void irLoop()

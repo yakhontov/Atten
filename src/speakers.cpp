@@ -180,8 +180,8 @@ void speakersSwitchToStereo(int8_t showPicture)
     if (showPicture) // Картинку можно отключить, чтобы не мешала при старте системы
         screenShowSpeakers(true, false, true, false, 3000);
     speakersSetMode(true, false, true, false);
-    digitalWrite(POWER_DAC, HIGH); // В стерео режиме включаем DAC
-    digitalWrite(POWER_REAR_CENTER, LOW);
+    digitalWrite(POWER_DAC, LOW); // В стерео режиме включаем DAC
+    digitalWrite(POWER_REAR_CENTER, HIGH);
     speakersLoadVolume(); // При переключении режима перезагружаем значение громкости из EEPROM
     delay(200);           // Ждем пока пройдут переходные процессы
 }
@@ -192,15 +192,15 @@ void speakersSwitchToMch(int8_t showPicture)
     if (showPicture) // Картинку можно отключить, чтобы не мешала при старте системы
         screenShowSpeakers(true, true, true, true, 3000);
     speakersSetMode(true, true, true, true);
-    digitalWrite(POWER_DAC, LOW); // В режиме MCH отключаем DAC
-    digitalWrite(POWER_REAR_CENTER, HIGH);
+    digitalWrite(POWER_DAC, HIGH); // В режиме MCH отключаем DAC
+    digitalWrite(POWER_REAR_CENTER, LOW);
     speakersLoadVolume(); // При переключении режима перезагружаем значение громкости из EEPROM
     delay(200);           // Ждем пока пройдут переходные процессы
 }
 
 int8_t speakersIsStereo()
 {
-    return digitalRead(POWER_DAC); // Включен ли стерео режим определяем по факту включенного DAC
+    return !digitalRead(POWER_DAC); // Включен ли стерео режим определяем по факту включенного DAC
 }
 
 void powerOn(bool stereoMode)
@@ -209,7 +209,7 @@ void powerOn(bool stereoMode)
     deviceEnabled = true;
     blackScreenMode = false;
     digitalWrite(LED_STANDBY, LOW);
-    digitalWrite(POWER_FRONT_SUB, HIGH);
+    digitalWrite(POWER_FRONT_SUB, LOW);
     screenEnable(true);
     //screenShowBitmap(startupBitmaps[random(startupIconsCount)], 3000);
     // if (stereoMode)
@@ -226,10 +226,12 @@ void powerOff()
 {
     LOG;
     deviceEnabled = false;
-    digitalWrite(POWER_DAC, LOW);
-    digitalWrite(POWER_FRONT_SUB, LOW);
-    digitalWrite(POWER_REAR_CENTER, LOW);
+    digitalWrite(POWER_DAC, HIGH);
+    digitalWrite(POWER_FRONT_SUB, HIGH);
+    digitalWrite(POWER_REAR_CENTER, HIGH);
     digitalWrite(LED_STANDBY, HIGH);
+    if (millis() > 500)
+        screenShowBitmap(bmp_smoke, 3000);
     // if (millis() > 500)
     //     screenShowBitmap(startupBitmaps[random(startupIconsCount)], 3000);
 }
