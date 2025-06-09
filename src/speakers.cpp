@@ -211,11 +211,15 @@ void powerOn(bool stereoMode)
     digitalWrite(LED_STANDBY, LOW);
     digitalWrite(POWER_FRONT_SUB, HIGH);
     screenEnable(true);
-    screenShowBitmap(startupBitmaps[random(startupIconsCount)], 3000);
+    //screenShowBitmap(startupBitmaps[random(startupIconsCount)], 3000);
+    // if (stereoMode)
+    //     speakersSwitchToStereo(false); // При включении скрываем картику переключения режима, чтобы она не перекрывала заставку
+    // else
+    //     speakersSwitchToMch(false);
     if (stereoMode)
-        speakersSwitchToStereo(false); // При включении скрываем картику переключения режима, чтобы она не перекрывала заставку
+        speakersSwitchToStereo(true); // При включении скрываем картику переключения режима, чтобы она не перекрывала заставку
     else
-        speakersSwitchToMch(false);
+        speakersSwitchToMch(true);
 }
 
 void powerOff()
@@ -226,6 +230,6 @@ void powerOff()
     digitalWrite(POWER_FRONT_SUB, LOW);
     digitalWrite(POWER_REAR_CENTER, LOW);
     digitalWrite(LED_STANDBY, HIGH);
-    if (millis() > 500)
-        screenShowBitmap(startupBitmaps[random(startupIconsCount)], 3000);
+    // if (millis() > 500)
+    //     screenShowBitmap(startupBitmaps[random(startupIconsCount)], 3000);
 }
