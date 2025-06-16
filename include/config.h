@@ -20,6 +20,6 @@ const int STEREO_BTN = A7;
 const int MCH_BTN = 43;
 
 // SpeakerType
-const char SUB_PORT = 'A', CENTER_PORT = 'C', FRONT_PORT = 'F', REAR_PORT = 'K';
+const char SUB_PORT = 'A', CENTER_PORT = 'C', FRONT_PORT = 'K', REAR_PORT = 'F';
 
 const int8_t maxVolume = 63;
